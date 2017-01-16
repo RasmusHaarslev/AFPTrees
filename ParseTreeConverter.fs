@@ -39,7 +39,6 @@ module ParseTreeConverter =
             | Call (s,expl) ->
                 let expTree = List.map convertExp expl
                 Node("Call",[Node(s,[])] @ expTree)
-            | _       -> Node ("NYI",[])
 
     and convertGC gc = List.collect (fun (e,stml) -> [convertExp e] @ (List.map convertStm stml)) gc
 
@@ -50,7 +49,6 @@ module ParseTreeConverter =
             | Access acc    -> Node("Access",[convertAcc acc])
             | Addr acc      -> Node("Addr",[convertAcc acc])
             | Apply (s,expl) -> Node(s,List.map convertExp expl)
-            | _ -> Node("NYI",[])
 
     and convertTyp typ =
         match typ with
@@ -66,7 +64,6 @@ module ParseTreeConverter =
             | AVar s            -> Node(s,[])
             | AIndex (acc,exp)  -> Node("AIndex",[convertAcc acc] @ [convertExp exp])
             | ADeref exp        -> Node("ADeref",[convertExp exp])
-            | _     -> Node("NYI",[])
 
 
 

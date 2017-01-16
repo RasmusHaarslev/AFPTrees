@@ -22,20 +22,12 @@ open TreeDrawing.TreeGeneration
 open TreeDrawing.Drawing
 open TreeDrawing.ParseTreeConverter
 
-let someTree = Node (("A",2.0),[Node (("B",3.0),[]);Node (("C",4.0),[])])
-let someTree2 = Node ("A",[Node ("B",[Node ("D",[]);Node ("E",[])]);Node ("C",[])])
-let someTree3 = Node ("A",[Node ("B",[]);Node ("C",[])])
-
-
-
-let hugeTree = TreeDrawing.TreeGeneration.generateRandomTree (3,7) 15
+#time "on";;
+let hugeTree = TreeDrawing.TreeGeneration.generateCompleteTree 7 7
 //printfn "%A" (design hugeTree)
 TreeDrawing.Drawing.drawTreePS hugeTree "testout.ps"
 
 
-let k = (parseFromFile("test_programs/QuickSortV2.gc"))
-
-#time "on";;
-let b = convertProg k
-printfn "%A" b
-drawTreePS b "testout.ps"
+//let k = (parseFromFile("test_programs/QuickSortV2.gc"))
+//let b = convertProg k
+//drawTreePS b "testout.ps"
