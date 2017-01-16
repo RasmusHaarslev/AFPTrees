@@ -3,12 +3,12 @@ namespace TreeDrawing
 open TreeDrawing.Types
 
 module TreeDesign =
-  let moveTree ((Node ((l,xPos),childs)),x) = (Node ((l,xPos+x),childs))
+  let moveTree ((Node ((l,xPos),childs)),x : float) = (Node ((l,xPos+x),childs))
 
   let moveExtent ((e : Extent),x) =
       List.map (fun (p,q) -> (p+x,q+x)) e
 
-  // Merge two extents
+  // Merge two extents4
   let rec merge (ps,qs) =
     match ps,qs with
       | [],qs   -> qs
@@ -34,7 +34,7 @@ module TreeDesign =
         | acc,e::es   ->
           let x = fit acc e
           in
-            x :: (fitlistl' (merge (acc,(moveExtent (e,x)))) es)
+            x :: (fitlistl' (merge (acc,moveExtent (e,x))) es)
     in
       fitlistl' [] es
 
