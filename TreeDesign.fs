@@ -3,12 +3,14 @@ namespace TreeDrawing
 open TreeDrawing.Types
 
 module TreeDesign =
+  // Tested.
   let moveTree ((Node ((l,xPos),childs)),x : float) = (Node ((l,xPos+x),childs))
 
+  // Tested
   let moveExtent ((e : Extent),x) =
       List.map (fun (p,q) -> (p+x,q+x)) e
 
-  // Merge two extents4
+  // Merge two extents
   let rec merge (ps,qs) =
     match ps,qs with
       | [],qs   -> qs
@@ -17,6 +19,10 @@ module TreeDesign =
 
   // Merge n extents
   let mergeList es = List.fold (fun acc e -> merge(acc,e)) [] es
+(*  let rec mergeList es =
+      match es with
+          | [] -> []
+          | e::es -> merge(e,mergeList es) *)
 
   // Fitting functions
   let rmax ((p : float),(q : float)) = if p > q then p else q
@@ -65,7 +71,7 @@ module TreeDesign =
       in
         (resulttree,resultextent)
     in
-      fst (design' tree)
+        printfn "%A" (snd (design' tree)); fst (design' tree)
 
 
 
