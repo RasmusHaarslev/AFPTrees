@@ -1,0 +1,7 @@
+begin
+res : int,
+a : int[3],
+y : int;
+print res+y;
+print 3+4
+end

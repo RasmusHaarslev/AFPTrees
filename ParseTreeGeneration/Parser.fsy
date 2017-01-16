@@ -1,0 +1,132 @@
+﻿%{
+open GuardedCommands.Frontend.AST
+%}
+
+%token <int> INT
+%token <bool> BOOL
+%token <string> STRING
+%token <string> NAME
+%token ITYP BTYP
+%token LP LCP LSP RP RCP RSP
+%token IF FI DO OD BEGIN END
+%token COMMA COLON SEMI BAR TO
+%token NEG PLUS MINUS TIMES DIV MOD AND EQ LE GE LT GT NEQ HAT AMP
+%token PRINT ASG SKIP ABORT RETURN
+%token EOF
+%token FUN
+%token PROC
+%token HIGH
+
+%left AND
+%nonassoc NEG
+%left EQ LE GE LT GT NEQ
+%left PLUS MINUS
+%left TIMES DIV MOD AMP HAT
+
+%start Main Prog
+%type <Exp> Exp
+%type <Access> Access
+%type <(Exp * Stm list) list> GCList
+%type <GuardedCommand> GuardedCommand
+%type <Stm list> StmList StmL
+%type <Stm> Stm
+%type <Typ> BasicTyp Typ
+%type <Dec> Dec
+%type <Dec list> DecL DecList
+%type <Program> Main Prog
+%%
+
+Main:
+   Prog EOF                            { $1 }
+
+Prog:
+    BEGIN DecList SEMI StmL END        { P($2, $4) }
+  | BEGIN StmL END                     { P([], $2) }
+
+BasicTyp:
+    BTYP                              { BTyp }
+  | ITYP                              { ITyp }
+
+Typ:
+    BasicTyp                          { $1 }
+
+Dec:
+    NAME COLON Typ                    { VarDec($3,$1) }
+  | NAME COLON HAT Typ                { VarDec(PTyp($4),$1) }
+  | FUN NAME LP DecL RP COLON Typ EQ Stm        { FunDec(Some $7,$2,$4,$9) }
+  | PROC NAME LP DecL RP EQ Stm           { FunDec(None,$2,$4,$7) }
+    // Array declaration    .
+  | NAME COLON HAT Typ LSP RSP            { VarDec(PTyp(ATyp($4, None)), $1)}
+  | NAME COLON Typ LSP RSP                { VarDec(ATyp ($3, None), $1) }
+  | NAME COLON Typ LSP INT RSP            { VarDec(ATyp ($3,Some $5), $1) }
+
+DecL:
+                                      { [] }
+   | DecList                          { $1 }
+
+DecList:
+   | Dec                              { [$1] }
+   | Dec COMMA DecList                { $1 :: $3 }
+
+Access:
+    NAME                             { AVar $1 }
+  | NAME LSP Exp RSP                 { AIndex(AVar $1, $3) }
+  | Access HAT                       { ADeref Access($1) }
+
+Stm:
+    PRINT Exp                         { PrintLn $2 }
+  | Access ASG Exp                    { Ass($1,$3)  }
+  | RETURN Exp                        { Return(Some $2)}
+  | SKIP                              { Do (GC []) }
+  | ABORT                             { Alt (GC []) }
+  | LCP StmL  RCP                     { Block([], $2) }
+  | LCP DecL SEMI StmL RCP            { Block($2, $4) }
+  | IF GuardedCommand FI              { Alt $2 }
+  | DO GuardedCommand OD              { Do $2  }
+  | NAME LP ExpL RP                   { Call($1, $3) }
+
+StmL:
+                                      { [] }
+  | StmList                           { $1 }
+
+StmList:
+  | Stm                               { [$1] }
+  | Stm SEMI StmList                  { $1 :: $3 }
+
+GuardedCommand:
+                                      { GC [] }
+  | GCList                            { GC $1 }
+
+GCList:
+    Exp TO StmL                       { [($1,$3)]   }
+  | Exp TO StmL BAR GCList	   		  { ($1,$3)::$5 }
+
+Exp:
+    Access                            { Access $1 }
+  | INT                               { N $1 }
+  | BOOL                              { B $1 }
+  | NAME LP ExpL RP                { Apply($1, $3) }
+  | LP Exp RP                         { $2 }
+  | AMP Access                        { Addr $2 }
+  | MINUS Exp                         { Apply("-", [$2])}
+  | NEG Exp                           { Apply("!", [$2])}
+  | Exp TIMES Exp                     { Apply("*", [$1; $3])}
+  | Exp DIV Exp                       { Apply("/", [$1; $3])}
+  | Exp MOD Exp                       { Apply("%", [$1; $3])}
+  | Exp PLUS Exp                      { Apply("+", [$1; $3])}
+  | Exp MINUS Exp                     { Apply("-", [$1; $3])}
+  | Exp AND Exp                       { Apply("&&", [$1; $3])}
+  | Exp EQ Exp                        { Apply("=", [$1; $3])}
+  | Exp LE Exp                        { Apply("<=", [$1; $3])}
+  | Exp GE Exp                        { Apply(">=", [$1; $3])}
+  | Exp GT Exp                        { Apply(">", [$1; $3])}
+  | Exp LT Exp                        { Apply("<", [$1; $3])}
+  | Exp NEQ Exp                       { Apply("<>", [$1; $3])}
+
+ExpList:
+  | Exp                               { [$1] }
+  | Exp COMMA ExpList                  { $1 :: $3 }
+
+ExpL:
+                                       { [] }
+  | ExpList                            { $1 }

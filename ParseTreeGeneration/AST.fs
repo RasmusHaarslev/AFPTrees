@@ -5,9 +5,6 @@
 // It must preceed TypeChecks.fs, CodeGen.fs, CodeGenOpt.fs, Util.fs in Solution Explorer
 //
 
-open System
-open Machine
-
 module AST =
 
    type Exp =
