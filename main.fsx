@@ -1,16 +1,17 @@
 #load "Types.fs"
 #load "TreeDesign.fs"
 #load "TreeGeneration.fs"
+#load "TreeDraw.fs"
 
 open TreeDrawing.Types
 open TreeDrawing.TreeDesign
 open TreeDrawing.TreeGeneration
-
+open TreeDrawing.Drawing
 
 //printfn "%A" (Types.generateCompleteTree 4 5)
 
 let someTree = Node (("A",2.0),[])
-let someTree2 = Node ("A",[Node ("B",[]);Node ("C",[])])
+let someTree2 = Node ("A",[Node ("B",[]);Node ("C",[]);Node ("D",[]);Node ("E",[]);Node ("F",[])])
 //printfn "%A" (TreeDrawing.TreeGeneration.generateRandomTree (4,10) 10)
 
 let someExtent = [(3.,3.);(1.,4.)]
@@ -23,5 +24,7 @@ printfn "%A" (TreeDrawing.TreeDesign.fit someExtent someExtent2)
 
 
 printfn "%A" (TreeDrawing.TreeDesign.design someTree2)
+
+TreeDrawing.Drawing.drawTreeGustav someTree2
 
 //printfn "%A" (TreeDrawing.TreeDrawing.)
