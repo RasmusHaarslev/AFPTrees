@@ -49,9 +49,9 @@ module TreeDesign =
       match acc,ls with
         | acc,[]      -> []
         | acc,e::es   ->
-          let x = -(fit acc e)
+          let x = -(fit e acc)
           in
-            x :: (fitlistr' (merge (acc,(moveExtent(e,x)))) es)
+            x :: (fitlistr' (merge ((moveExtent(e,x),acc))) es)
     in
       List.rev (fitlistr' [] (List.rev es))
 
@@ -71,7 +71,7 @@ module TreeDesign =
       in
         (resulttree,resultextent)
     in
-        printfn "%A" (snd (design' tree)); fst (design' tree)
+        fst (design' tree)
 
 
 

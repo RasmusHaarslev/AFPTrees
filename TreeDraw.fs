@@ -7,7 +7,7 @@ open TreeDrawing.Types
 
 module Drawing =
 
-    let scale = 40.
+    let scale = 30.
     let fontScale = int (scale / 4.)
 
     let drawLeaf n parX depth (writer : StreamWriter) =
