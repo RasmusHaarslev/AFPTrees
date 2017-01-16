@@ -21,6 +21,6 @@ module TreeGeneration =
       match tree,maxDepth with
         | _,0       -> tree
         | Node (l,[]),n    -> (Node (l,(List.map (fun x -> inner (Node (maxDepth,[])) (rnd.Next(0,maxDepth-1)))  [1 .. thisBFactor])))
-        | _,_       -> (sprintf "Should not be here. tree: %A" tree) |> failwith 
+        | _,_       -> (sprintf "Should not be here. tree: %A" tree) |> failwith
     in
       inner (Node(maxDepth,[])) maxDepth
