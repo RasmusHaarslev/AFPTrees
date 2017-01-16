@@ -1,9 +1,9 @@
 #load "Types.fs"
-#load "TreeDrawing.fs"
+#load "TreeDesign.fs"
 #load "TreeGeneration.fs"
 
 open TreeDrawing.Types
-open TreeDrawing.TreeDrawing
+open TreeDrawing.TreeDesign
 open TreeDrawing.TreeGeneration
 
 
@@ -16,12 +16,12 @@ let someTree2 = Node ("A",[Node ("B",[]);Node ("C",[])])
 let someExtent = [(3.,3.);(1.,4.)]
 let someExtent2 = [(9.,9.);(6.,12.)]
 
-printfn "%A" (TreeDrawing.TreeDrawing.moveExtent (someExtent,3.))
-printfn "%A" (TreeDrawing.TreeDrawing.merge (someExtent,someExtent2))
-printfn "%A" (TreeDrawing.TreeDrawing.mergeList [someExtent;someExtent2])
-printfn "%A" (TreeDrawing.TreeDrawing.fit someExtent someExtent2)
+printfn "%A" (TreeDrawing.TreeDesign.moveExtent (someExtent,3.))
+printfn "%A" (TreeDrawing.TreeDesign.merge (someExtent,someExtent2))
+printfn "%A" (TreeDrawing.TreeDesign.mergeList [someExtent;someExtent2])
+printfn "%A" (TreeDrawing.TreeDesign.fit someExtent someExtent2)
 
 
-printfn "%A" (TreeDrawing.TreeDrawing.design someTree2)
+printfn "%A" (TreeDrawing.TreeDesign.design someTree2)
 
 //printfn "%A" (TreeDrawing.TreeDrawing.)

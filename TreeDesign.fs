@@ -2,7 +2,7 @@ namespace TreeDrawing
 
 open TreeDrawing.Types
 
-module TreeDrawing =
+module TreeDesign =
   let moveTree ((Node ((l,xPos),childs)),x) = (Node ((l,xPos+x),childs))
 
   let moveExtent ((e : Extent),x) =
@@ -16,7 +16,6 @@ module TreeDrawing =
       | ((p,_)::ps,(_,q)::qs) -> (p,q)::(merge(ps,qs))
 
   // Merge n extents
-  //let mergeList es = List.fold (fun acc e -> acc @ (merge e)) [] es
   let mergeList es = List.fold (fun acc e -> merge(acc,e)) [] es
 
   // Fitting functions
