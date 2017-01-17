@@ -7,8 +7,6 @@ open TreeDrawing.Types
 module ParseTreeConverter =
 
     let rec convertProg (P (decls,stms)) =
-        printfn "%A" decls
-        printfn "%A" stms
         let childDecls = List.map convertDec decls
         let childStms = List.map convertStm stms
         Node ("Prog", childDecls @ childStms)
